@@ -1,0 +1,205 @@
+apt update
+apt install libgl1-mesa-glx
+apt-get install libglib2.0-0
+apt-get install libvulkan-dev
+
+
+
+python3 example/3D_pos_node.py \
+  --robot-name shadow \
+  --retargeting-type custom \
+  --hand-type right \
+  --output-path example/data/shadow_hand.pkl
+  
+python3 example/3D_pos_node.py \
+  --robot-name shadow \
+  --retargeting-type dexpilot \
+  --hand-type right \
+  --output-path example/data/shadow_hand.pkl  
+  
+python3 example/retarget_debug_node.py \
+  --robot-name shadow \
+  --retargeting-type custom \
+  --hand-type right \
+  --output-path example/data/shadow_hand.pkl  
+
+#################################################################################
+python3 example/rgb_node.py
+
+python3 example/3D_pos_node.py \
+  --robot-name shadow \
+  --retargeting-type custom \
+  --hand-type right \
+  --output-path example/data/shadow_hand.pkl \
+  --node-name triag1
+
+python3 example/3D_pos_node.py \
+  --robot-name shadow \
+  --retargeting-type custom \
+  --hand-type left \
+  --output-path example/data/shadow_hand.pkl \
+  --node-name triag2
+
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/bihand_ros.py \
+  --input-topic /cam1/rgb/image \
+  --output-topic /annotated_img1 \
+  --pos-topic /cam1/joint_pos \
+  --node-name pose_node1
+
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/bihand_ros.py \
+  --input-topic /cam2/rgb/image \
+  --output-topic /annotated_img2 \
+  --pos-topic /cam2/joint_pos \
+  --node-name pose_node2
+
+#################################################################################
+python3 example/3D_pos_node.py \
+  --robot-name shadow \
+  --retargeting-type custom \
+  --hand-type right \
+  --output-path example/data/shadow_hand.pkl \
+  --node-name triag1
+
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/detect_from_ros.py \
+  --hand-type Right \
+  --input-topic /cam1/rgb/image_raw \
+  --output-topic /annotated_img1 \
+  --pos-topic /cam1/joint_pos/Right \
+  --node-name pose_node1
+
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/detect_from_ros.py \
+  --hand-type Right \
+  --input-topic /cam2/rgb/image_raw \
+  --output-topic /annotated_img2 \
+  --pos-topic /cam2/joint_pos/Right \
+  --node-name pose_node2
+  
+  
+  
+python3 example/3D_pos_node_zed2.py \
+  --robot-name shadow \
+  --retargeting-type custom \
+  --hand-type right \
+  --output-path example/data/shadow_hand.pkl \
+  --node-name triag1
+
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/detect_from_ros.py \
+  --hand-type Right \
+  --input-topic /zed2/zed_node/left/image_rect_color \
+  --output-topic /annotated_img1 \
+  --pos-topic /cam1/joint_pos/Right \
+  --node-name pose_node1
+
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/detect_from_ros.py \
+  --hand-type Right \
+  --input-topic /zed2/zed_node/right/image_rect_color \
+  --output-topic /annotated_img2 \
+  --pos-topic /cam2/joint_pos/Right \
+  --node-name pose_node2  
+#################################################################################
+python3 example/3D_pos_node.py \
+  --robot-name shadow \
+  --retargeting-type custom \
+  --hand-type left \
+  --output-path example/data/shadow_hand.pkl \
+  --node-name triag2
+
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/detect_from_ros.py \
+  --hand-type Left \
+  --input-topic /cam1/rgb/image_raw \
+  --output-topic /annotated_img3 \
+  --pos-topic /cam1/joint_pos/Left \
+  --node-name pose_node3
+
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/detect_from_ros.py \
+  --hand-type Left \
+  --input-topic /cam2/rgb/image_raw \
+  --output-topic /annotated_img4 \
+  --pos-topic /cam2/joint_pos/Left \
+  --node-name pose_node4
+#################################################################################
+
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/detect_from_ros.py \
+  --robot-name shadow \
+  --video-path example/data/human_hand_video.mp4 \
+  --retargeting-type dexpilot \
+  --hand-type right \
+  --output-path example/data/shadow_hand.pkl  
+
+
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/detect_from_ros.py \
+  --robot-name shadow \
+  --video-path example/data/human_hand_video.mp4 \
+  --retargeting-type vector \
+  --hand-type right \
+  --output-path example/data/shadow_hand.pkl  
+
+
+
+
+
+
+
+
+
+
+
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/detect_from_video.py \
+  --robot-name allegro \
+  --video-path example/data/human_hand_video.mp4 \
+  --retargeting-type vector \
+  --hand-type right \
+  --output-path example/data/allegro_joints.pkl 
+  
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/render_robot_hand.py \
+  --pickle-path example/data/allegro_joints.pkl \
+  --output-video-path example/data/retargeted_allegro.mp4 \
+  --headless
+  
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/detect_from_video.py \
+  --robot-name shadow \
+  --video-path example/data/human_hand_video.mp4 \
+  --retargeting-type vector \
+  --hand-type right \
+  --output-path example/data/shadow_hand.pkl   
+  
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/render_robot_hand.py \
+  --pickle-path example/data/shadow_hand.pkl \
+  --output-video-path example/data/shadow_hand.mp4 \
+  --headless
+
+  
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/detect_from_video.py \
+  --robot-name shadow \
+  --video-path example/data/human_hand_video.mp4 \
+  --retargeting-type dexpilot \
+  --hand-type right \
+  --output-path example/data/shadow_hand2.pkl 
+  
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/render_robot_hand.py \
+  --pickle-path example/data/shadow_hand2.pkl \
+  --output-video-path example/data/shadow_hand2.mp4 \
+  --headless 
+  
+  
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/render_robot_hand.py \
+  --pickle-path example/data/allegro_joints.pkl \
+  --output-video-path example/data/retargeted_allegro.mp4 \
+  --headless  

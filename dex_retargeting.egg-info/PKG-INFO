@@ -1,0 +1,116 @@
+Metadata-Version: 2.1
+Name: dex-retargeting
+Version: 0.0.1
+Summary: Hand pose retargeting for dexterous robot hand.
+Home-page: https://github.com/dexsuite/dex-retargeting
+Author: Yuzhe Qin
+Author-email: y1qin@ucsd.edu
+Maintainer: Yuzhe Qin
+Maintainer-email: y1qin@ucsd.edu
+License: MIT
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Requires-Python: >=3.7,<3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: torch
+Requires-Dist: sapien>=2.0.0
+Requires-Dist: nlopt
+Requires-Dist: trimesh
+Requires-Dist: anytree
+Requires-Dist: pycollada
+Requires-Dist: pyyaml
+Requires-Dist: lxml
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: isort; extra == "dev"
+Requires-Dist: pytest-xdist; extra == "dev"
+Requires-Dist: pyright; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Provides-Extra: example
+Requires-Dist: tyro; extra == "example"
+Requires-Dist: tqdm; extra == "example"
+Requires-Dist: opencv-python; extra == "example"
+Requires-Dist: mediapipe; extra == "example"
+
+Dex Retargeting
+---
+<p align="center">
+    <!-- code check badges -->
+    <a href='https://github.com/dexsuite/dex-retargeting/blob/main/.github/workflows/test.yml'>
+        <img src='https://github.com/dexsuite/dex-retargeting/actions/workflows/test.yml/badge.svg' alt='Test Status' />
+    </a>
+    <!-- license badge -->
+    <a href="https://github.com/dexsuite/dex-retargeting/blob/main/LICENSE">
+        <img alt="License" src="https://img.shields.io/badge/license-MIT-blue">
+    </a>
+</p>
+
+## Installation
+
+```shell
+pip3 install -e ".[example]"
+# If you do not need to run the examples:
+# pip install -e .
+
+```
+
+## Examples
+
+### Retargeting from human video
+
+1. **Generate the robot joint pose trajectory from our pre-recorded video.**
+
+```shell
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/detect_from_video.py \
+  --robot-name allegro \
+  --video-path example/data/human_hand_video.mp4 \
+  --retargeting-type vector \
+  --hand-type right \
+  --output-path example/data/allegro_joints.pkl 
+```
+
+This command will output the joint trajectory as a pickle file at the `output_path`.
+
+The pickle file is a python dictionary with two keys: `meta_data` and `data`. `meta_data`, a dictionary, includes
+details about the robot, while `data`, a list, contains the robotic joint positions for each frame. For additional
+options, refer to the help information. Note that the time cost here includes both the hand pose detection from video,
+and the hand pose retargeting in single process mode.
+
+```shell
+python3 example/detect_from_video.py --help
+```
+
+2. **Utilize the pickle file to produce a video of the robot**
+
+```shell
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/render_robot_hand.py \
+  --pickle-path example/data/allegro_joints.pkl \
+  --output-video-path example/data/retargeted_allegro.mp4 \
+  --headless
+```
+
+This command uses the data saved from the previous step to create a rendered video.
+
+3. **Record a video of your own hand**
+
+```bash
+export PYTHONPATH=$PYTHONPATH:`pwd`
+python3 example/capture_webcam.py --video-path example/data/my_human_hand_video.mp4
+```
+
+This command will access your webcam (which should be connected to your computer) and record the video stream in mp4
+format. To end video recording, press `q` on the keyboard.

@@ -1,0 +1,28 @@
+retargeting:
+  type: CUSTOM
+  urdf_path: shadow_hand/shadow_hand_right.urdf
+  
+
+  # Target refers to the retargeting target, which is the robot hand
+  target_joint_names: null
+  # target_origin_link_names: ["palm", "palm", "palm", "palm", "palm"]
+  # target_task_link_names: ["thtip", "fftip", "mftip", "rftip", "lftip"]
+  # target_task_link_names: [ "thdistal", "ffdistal", "mfdistal", "rfdistal", "lfdistal" ]
+  
+  target_origin_link_names: ["thbase", "thbase",   "ffknuckle", "ffknuckle", "mfknuckle", "mfknuckle", "rfknuckle", "rfknuckle", "lfknuckle", "lfknuckle",  "palm",    "palm", "palm", "palm", "palm", "palm"]
+  target_task_link_names: ["thmiddle", "thtip",     "ffmiddle", "fftip",      "mfmiddle", "mftip",      "rfmiddle", "rftip",     "lfmiddle" , "lftip",     "lfknuckle", "thtip", "fftip", "mftip", "rftip", "lftip"]
+  
+  wrist_link_name: "ee_link"
+  finger_tip_link_names: [ "thtip", "fftip", "mftip", "rftip", "lftip" ]
+  #target_origin_link_names: [ "palm", "palm", "palm", "palm", "palm", "palm", "palm", "palm", "palm", "palm",   "palm" ]
+  #target_task_link_names: [ "thtip", "fftip", "mftip", "rftip", "lftip",  "thmiddle", "ffmiddle", "mfmiddle", "rfmiddle", "lfmiddle" ,  "thdistal"]
+
+  scaling_factor: 1.2
+
+  # Source refers to the retargeting input, which usually corresponds to the human hand
+  # The joint indices of human hand joint which corresponds to each link in the target_link_names
+  target_link_human_indices: [ [ 1, 1, 5, 5, 9, 9, 13, 13, 17, 17,   0,   0, 0, 0, 0, 0], [ 2, 4, 6, 8, 10, 12, 14, 16, 18, 20,   17,   4, 8, 12, 16, 20] ] 
+  #target_link_human_indices: [ [ 0, 0, 0, 0, 0], [ 4, 8, 12, 16, 20] ] 
+
+  # A smaller alpha means stronger filtering, i.e. more smooth but also larger latency
+  low_pass_alpha: 0.6
